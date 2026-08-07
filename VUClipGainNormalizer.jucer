@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="vcgn0001" name="VUClipGainNormalizer" projectLineFeed="&#10;"
+              companyName="" companyCopyright="" companyWebsite="" companyEmail=""
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" cppLanguageStandard="17"
+              projectType="audioplug" pluginFormats="buildStandalone" pluginName="VOX Normalizer"
+              pluginDesc="RMS normalizer for vocal clips" pluginManufacturer="Ryo"
+              pluginManufacturerCode="Ryon" pluginCode="VCGn" pluginChannelConfigs="{1, 1},{2, 2}"
+              pluginIsSynth="0" pluginWantsMidiInput="0" pluginProducesMidiOut="0"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="VoxNormalizerAU"
+              aaxIdentifier="com.ryo.voxnormalizer" pluginVST3Category="Fx"
+              bundleIdentifier="com.ryo.voxnormalizer" version="1.2.0" jucerFormatVersion="1">
+  <MAINGROUP id="maingrp" name="VUClipGainNormalizer">
+    <GROUP id="srcgrp" name="Source">
+      <FILE id="f00001" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="f00002" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="f00003" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="f00004" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="f00005" name="WaveformView.h" compile="0" resource="0" file="Source/WaveformView.h"/>
+      <FILE id="f00007" name="VoxLookAndFeel.h" compile="0" resource="0"
+            file="Source/VoxLookAndFeel.h"/>
+      <FILE id="icon16" name="AppIcon_16.png" compile="0" resource="1" file="Source/AppIcon_16.png"/>
+      <FILE id="icon512" name="AppIcon_512.png" compile="0" resource="1"
+            file="Source/AppIcon_512.png"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" enablePluginCopyStep="1" vstFolder=""
+               vst3Folder="" auFolder="" extraSearchPaths="" customXcodeResourceFolders=""
+               iosBackgroundAudio="0" iosBackgroundBle="0" iosPushNotifications="0"
+               iOSFileSharing="0" iosContentSharing="0" iosInAppPurchases="0"
+               iosMicrophone="0" iosCameraDescription="" iosBluetoothDescription=""
+               iosAudioDescription="" bigIcon="icon512" smallIcon="icon16">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" targetName="VOX Normalizer" binaryPath="build/Debug"
+                       optimisation="1" headerPath="" libraryPath="" externalLibraries=""
+                       defines="DEBUG=1 _DEBUG=1" cppLanguageStandard="17"/>
+        <CONFIGURATION name="Release" isDebug="0" targetName="VOX Normalizer" binaryPath="build/Release"
+                       optimisation="3" headerPath="" libraryPath="" externalLibraries=""
+                       defines="NDEBUG=1" cppLanguageStandard="17"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="~/Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="~/Documents/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+</JUCERPROJECT>

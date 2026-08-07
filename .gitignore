@@ -1,0 +1,61 @@
+# =====================================================================
+#  VOX Normalizer — 公開リポジトリに含めないもの
+#
+#  方針: 「ビルドに必要なもの」と「アプリのソース」だけを公開する。
+#        作業用の資料・素材・実験スクリプトはローカルに残すが公開しない。
+# =====================================================================
+
+# ---- Projucer が .jucer から再生成するもの ----
+Builds/
+JuceLibraryCode/
+
+# ---- ビルド成果物（配布は GitHub Releases から）----
+build/
+dist/
+*.dmg
+*.pkg
+*.zip
+*.app/
+*.aaxplugin/
+# create_icon.py が生成するもの（PNG から作り直せる）
+AppIcon.icns
+
+# ---- 内部作業資料（★個人情報・作業メモを含むので必ず除外）----
+# Handoff には署名ID・Team ID・旧 PACE の wcguid・ローカル絶対パスが載っている
+VOX_Normalizer_Handoff.md
+Booth_product_description.md
+
+# ---- 廃止した取説 PDF（説明は LP に集約）----
+*.pdf
+
+# ---- Booth / SNS 用の素材（コードリポジトリには不要）----
+booth_assets/
+*.mov
+
+# ---- アイコン・フォントの検討過程（ビルドには不要）----
+icon_v2/
+# 31MB の未使用フォント。ビルドに使っておらず、再配布はライセンス確認が要るので入れない
+Fonts/
+check_fonts.py
+check_sfns.py
+font_compare.py
+font_compare.png
+
+# ---- v1.2 で .dmg から .pkg に移行したため不要 ----
+make_dmg.sh
+dmg_assets/
+
+# ---- 旧方式のソース退避（git 導入後は不要）----
+backup_v*/
+
+# ---- macOS ----
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- エディタ ----
+.vscode/
+.idea/
+*.swp
+xcuserdata/
