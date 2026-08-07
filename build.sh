@@ -1,23 +1,23 @@
 #!/bin/bash
 # ============================================================
-# VOX Normalizer — 開発ビルド (Debug)
+# VOX Normalizer — development build (Debug)
 #
-# フォーマット: Standalone のみ
-#   v1.2 で AAX を廃止した。理由:
-#     - 配布は Standalone だけで、AAX は Ryo の Pro Tools 確認用でしかなかった
-#     - ソースを公開するため、Avid の NDA 物件である AAX SDK への
-#       ローカル絶対パスをリポジトリに残せない（他人がビルドできない）
-#     - AGPLv3 の条項は AAX / VST2 / AUv3 / iOS には使えない
-#   ※ Source 内の AAX 分岐コード（wrapperType 判定）は無害な死にコードとして
-#     残してある。消す作業のリスクの方が大きいため
+# Formats: Standalone only.
+#   AAX was dropped in v1.2 because:
+#     - only the Standalone build is distributed; AAX existed purely so the
+#       author could check the plugin in Pro Tools
+#     - the source is public, and the AAX SDK is under NDA from Avid, so a local
+#       absolute path to it cannot live in the repository (nobody else could build)
+#     - the AGPLv3 route cannot be used for AAX / VST2 / AUv3 / iOS targets
+#   The AAX branches inside Source (the wrapperType checks) are left in place as
+#   harmless dead code: removing them is riskier than keeping them.
 #
-# 環境: JUCE 8.0.12 / macOS 15 / Xcode 16〜26 で動作確認済み
-# xattr / CodeSign の罠を対処済み（VUMeter と同パターン）
+# Verified with JUCE 8.0.12 on macOS 15 with Xcode 16 through 26.
 #
-# 配布ビルドは build.sh ではなく notarize.sh → make_dmg.sh を使うこと
+# For a distributable build use notarize.sh then make_pkg.sh, not this script.
 # ============================================================
 
-set -e  # エラーがあったら即停止
+set -e  # stop at the first error
 
 PROJUCER=~/Documents/JUCE/Projucer.app/Contents/MacOS/Projucer
 JUCER_FILE="$(dirname "$0")/VUClipGainNormalizer.jucer"
@@ -27,17 +27,17 @@ echo "=========================================="
 echo "  VOX Normalizer Build Script (Debug)"
 echo "=========================================="
 
-# ---- Step 1: Projucer で Xcode プロジェクト再生成 ----
+# ---- Step 1: regenerate the Xcode project with the Projucer ----
 echo "[1/3] Projucer --resave ..."
 "$PROJUCER" --resave "$JUCER_FILE" --fix-missing-dependencies
 
-# ---- Step 2: pbxproj パッチ ----
-# 罠1対策: ditto に xattr 無効フラグを追加
-#   これが無いと拡張属性が原因で CodeSign が失敗する
+# ---- Step 2: patch the pbxproj ----
+# Adds the flags that stop ditto copying extended attributes.
+# Without this, CodeSign fails because of the attributes it would otherwise copy.
 echo "[2/3] pbxproj patch ..."
 sed -i '' 's| ditto | ditto --norsrc --noextattr --noqtn --noacl |g' "$PBXPROJ"
 
-# ---- Step 3: 罠2対策 - コード署名を無効化してビルド ----
+# ---- Step 3: build with code signing disabled ----
 echo "[3/3] xcodebuild ..."
 xcodebuild \
     -project "$(dirname "$0")/Builds/MacOSX/VUClipGainNormalizer.xcodeproj" \
@@ -49,9 +49,9 @@ xcodebuild \
     CODE_SIGNING_ALLOWED=NO \
     | grep -E "^(Build|error:|warning:|note:|\*\*)" || true
 
-# ---- Step 3.5: Standalone .app の CFBundleName を正式名称に修正 ----
-# Projucer の project name は Xcode プロジェクト名なので旧名のまま。
-# アプリのメニューバー表示名だけをここで上書きする
+# ---- Step 3.5: set CFBundleName on the Standalone .app ----
+# The Projucer project name is the Xcode project name, which is still the old one,
+# so only the name shown in the menu bar is overwritten here.
 APP_PLIST="$(dirname "$0")/build/Debug/VOX Normalizer.app/Contents/Info.plist"
 if [ -f "$APP_PLIST" ]; then
     /usr/libexec/PlistBuddy -c "Set :CFBundleName 'VOX Normalizer'" "$APP_PLIST"
