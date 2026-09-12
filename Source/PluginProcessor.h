@@ -1,6 +1,6 @@
 /*
     This file is part of VOX Normalizer.
-    Copyright (C) 2026 Ryo Yoneya (tokyomeltdown)
+    Copyright (C) 2026 tokyomeltdown
 
     VOX Normalizer is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published by
