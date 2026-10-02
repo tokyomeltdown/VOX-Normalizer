@@ -973,7 +973,7 @@ void VUClipGainNormalizerEditor::openSaveDialog()
     }
     if (processorRef.getVirtualClips().empty())
     {
-        showError ("No clips detected — try lowering the Silence Threshold.");
+        showError ("No clips detected - try lowering the Silence Threshold.");
         return;
     }
     // Safety net: if the analysis is not current (wrong length, or empty), run it now.
@@ -984,7 +984,7 @@ void VUClipGainNormalizerEditor::openSaveDialog()
 
     if (processorRef.getClipAnalyses().empty())
     {
-        showError ("Analysis not ready — move a slider to update.");
+        showError ("Analysis not ready - move a slider to update.");
         return;
     }
 
@@ -1146,7 +1146,7 @@ void VUClipGainNormalizerEditor::updateAAXStatusLabel()
         const juce::String gainStr = (gainDb >= 0.0f ? "+" : "")
                                      + juce::String (gainDb, 1) + " dB";
         aaxStatusLabel.setText ("RMS: " + juce::String (rmsDb, 1)
-                                + " dBFS   →   Gain: " + gainStr,
+                                + " dBFS   ->   Gain: " + gainStr,
                                 juce::dontSendNotification);
         aaxStatusLabel.setColour (juce::Label::textColourId, colText);
     }
@@ -1158,7 +1158,7 @@ void VUClipGainNormalizerEditor::updateDetectionDisplay()
     int count = (int) clips.size();
 
     if (count == 0)
-        clipCountLabel.setText ("No virtual clips detected  —  try lowering Silence Threshold",
+        clipCountLabel.setText ("No virtual clips detected  -  try lowering Silence Threshold",
                                 juce::dontSendNotification);
     else
         clipCountLabel.setText (juce::String (count) + " virtual clip" + (count > 1 ? "s" : "") + " detected",
