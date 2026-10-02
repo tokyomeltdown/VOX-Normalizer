@@ -1051,6 +1051,13 @@ void VUClipGainNormalizerEditor::loadFileAndUpdate (const juce::File& file)
                                    &processorRef.getVirtualClips());
         runAnalysis();
 
+        // v1.3: loading stops any playback, so bring the transport UI back to rest
+        // (v1.2 kept the stop icon and a frozen cursor when a file was opened mid-playback)
+        stopTimer();
+        waveformView.setPlaybackCursor (-1.0);
+        updatePlayButton();
+        saveStatusLabel.setText ({}, juce::dontSendNotification);
+
         // Show everything now that a file is loaded
         waveformView   .setVisible (true);
         playPauseButton.setVisible (true);
