@@ -1110,7 +1110,7 @@ void VUClipGainNormalizerEditor::updateFileInfoDisplay()
 
     juce::String info;
     info << fi.format << "  |  "
-         << (fi.numChannels == 1 ? "Mono" : "Stereo") << "  |  "
+         << (fi.numChannels == 1 ? juce::String ("Mono") : fi.numChannels == 2 ? juce::String ("Stereo") : juce::String (fi.numChannels) + " ch") << "  |  "
          << juce::String (fi.sampleRate / 1000.0, 1) << " kHz  |  "
          << fi.bitsPerSample << " bit  |  "
          << timeStr;
