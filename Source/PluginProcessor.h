@@ -202,6 +202,10 @@ private:
     FileInfo fileInfo;
     bool convertedFromMp3 = false;
 
+    // v1.3: metadata read from a WAV source (BWF time stamp, cue points, LIST info...),
+    // written back on a WAV export so the file can be spotted to its original position
+    juce::StringPairArray sourceMetadata;
+
     // The loaded audio
     std::unique_ptr<juce::AudioBuffer<float>> audioData;
 

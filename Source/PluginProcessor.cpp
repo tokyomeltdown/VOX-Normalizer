@@ -241,6 +241,7 @@ void VUClipGainNormalizerProcessor::clearLoadedFile()
 
     fileInfo = {};
     convertedFromMp3 = false;
+    sourceMetadata.clear();
 
     virtualClips.clear();
     clipAnalyses.clear();
@@ -270,6 +271,10 @@ bool VUClipGainNormalizerProcessor::loadFile (const juce::File& file)
     else if (ext == ".aiff" || ext == ".aif")  fileInfo.format = "AIFF";
     else if (ext == ".mp3")                  { fileInfo.format = "MP3"; convertedFromMp3 = true; }
     else                                       fileInfo.format = ext.toUpperCase().trimCharactersAtStart(".");
+
+    // v1.3: keep the WAV metadata for the export (only WAV: JUCE refuses AIFF metadata in a WAV)
+    if (fileInfo.format == "WAV")
+        sourceMetadata = reader->metadataValues;
 
     // Read the audio into memory
     int numCh = (int) reader->numChannels;
@@ -857,11 +862,15 @@ bool VUClipGainNormalizerProcessor::applyAndExport (const juce::File& outputFile
     // Pick the output format (MP3 in becomes WAV out)
     juce::String ext = outputFile.getFileExtension().toLowerCase();
     std::unique_ptr<juce::AudioFormat> format;
+    const bool writingAiff = (ext == ".aiff" || ext == ".aif");
 
-    if (ext == ".aiff" || ext == ".aif")
+    if (writingAiff)
         format = std::make_unique<juce::AiffAudioFormat>();
     else
         format = std::make_unique<juce::WavAudioFormat>();
+
+    // v1.3: carry a WAV source's metadata (BWF time stamp, cue points...) into a WAV export
+    const juce::StringPairArray metadata = writingAiff ? juce::StringPairArray() : sourceMetadata;
 
     // ---- v1.2 Step 4: write to a temporary file, then swap it in ----
     //
@@ -886,7 +895,7 @@ bool VUClipGainNormalizerProcessor::applyAndExport (const juce::File& outputFile
                                      fileInfo.sampleRate,
                                      (unsigned int) numCh,
                                      fileInfo.bitsPerSample,
-                                     {},
+                                     metadata,
                                      0));
 
         if (writer == nullptr) { tempFile.deleteFile(); return false; }
