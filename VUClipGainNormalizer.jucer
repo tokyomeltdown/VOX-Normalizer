@@ -37,10 +37,10 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" targetName="VOX Normalizer" binaryPath="build/Debug"
                        optimisation="1" headerPath="" libraryPath="" externalLibraries=""
-                       defines="DEBUG=1 _DEBUG=1" cppLanguageStandard="17"/>
+                       defines="DEBUG=1 _DEBUG=1" cppLanguageStandard="17" macOSDeploymentTarget="11.0"/>
         <CONFIGURATION name="Release" isDebug="0" targetName="VOX Normalizer" binaryPath="build/Release"
                        optimisation="3" headerPath="" libraryPath="" externalLibraries=""
-                       defines="NDEBUG=1" cppLanguageStandard="17"/>
+                       defines="NDEBUG=1" cppLanguageStandard="17" macOSDeploymentTarget="11.0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="~/Documents/JUCE/modules"/>
