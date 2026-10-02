@@ -656,7 +656,6 @@ void VUClipGainNormalizerProcessor::startPreview (bool useNormalized)
     // (for example, clicking Normalized again on the segmented control while
     // Normalized was already playing), makeCopyOf / setSize would reallocate a
     // buffer that the audio thread was reading, which is a race on freed memory.
-    // buffer that the audio thread was reading, which is a race on freed memory.
     //
     // AudioTransportSource::setSource(nullptr) takes the callback lock, so once it
     // returns the audio thread is no longer touching the buffers.
@@ -911,14 +910,9 @@ bool VUClipGainNormalizerProcessor::applyAndExport (const juce::File& outputFile
         return false;
     }
 
-    // Only now is it safe to remove the original
-    if (outputFile.existsAsFile() && ! outputFile.deleteFile())
-    {
-        tempFile.deleteFile();
-        return false;
-    }
-
-    if (! tempFile.moveFileTo (outputFile))
+    // v1.3: swap it in with a single rename, which replaces the original atomically
+    // (v1.2 deleted the original first, so a failed move would have lost both files)
+    if (! tempFile.replaceFileIn (outputFile))
     {
         tempFile.deleteFile();
         return false;
