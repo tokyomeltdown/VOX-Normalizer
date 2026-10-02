@@ -31,7 +31,7 @@ SIGN_INST="Developer ID Installer: $SIGNER"
 NOTARY_PROFILE="VOXNotary"
 APP_NAME="VOX Normalizer"
 VERSION="1.3"
-BUNDLE_ID="com.tokyomeltdown.voxnormalizer"
+BUNDLE_ID="com.tokyomeltdown.voxnormalizer"   # installer package identifier, not the app bundle id
 
 # ---- Paths ----
 ROOT="$(cd "$(dirname "$0")" && pwd)"

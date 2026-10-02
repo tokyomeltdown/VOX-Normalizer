@@ -46,7 +46,7 @@ namespace {
         if (auto* holder = juce::StandalonePluginHolder::getInstance())
         {
             // Remove the feedback-loop warning banner.
-            // There is no input bus and no input channels, so there is no feedback risk.
+            // No input device is ever opened (see below), so there is no feedback risk.
             holder->shouldMuteInput.setValue (false);
 
             auto& dm    = holder->deviceManager;

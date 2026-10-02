@@ -12,7 +12,7 @@
 #   The AAX branches inside Source (the wrapperType checks) are left in place as
 #   harmless dead code: removing them is riskier than keeping them.
 #
-# Verified with JUCE 8.0.12 on macOS 15 with Xcode 16 through 26.
+# Verified with JUCE 8.0.12 on macOS 15 and 26 with Xcode 16 through 26.3.
 #
 # For a distributable build use notarize.sh then make_pkg.sh, not this script.
 # ============================================================

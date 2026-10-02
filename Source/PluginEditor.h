@@ -23,6 +23,7 @@
 #include "VoxLookAndFeel.h"
 
 // ---- Table model for the clip list ----
+// Not shown since v1.2: the waveform overlay took over its job (the table is laid out at 0x0).
 class ClipListModel : public juce::TableListBoxModel
 {
 public:
@@ -184,6 +185,7 @@ private:
     juce::Label      saveStatusLabel;
 
     // ---- AAX AudioSuite UI (only shown when wrapperType is AAX) ----
+    // Unused since v1.2 dropped AAX (see build.sh); left in place as removing it is riskier.
     juce::Label       aaxTitleLabel      { {}, "VOX Normalizer  |  AAX AudioSuite" };
     juce::Label       aaxModeLabel       { {}, "Mode" };
     juce::TextButton  aaxAnalyzeButton   { "Analyze" };

@@ -188,6 +188,7 @@ public:
     const AnalysisParams&            getAnalysisParams() const { return currentAnalysisParams; }
 
     // ---- AAX AudioSuite parameters (registered with addParameter in the constructor) ----
+    // Unused since v1.2 dropped AAX (see build.sh); left in place as removing it is riskier.
     // Non-owning pointers; the AudioProcessor owns the parameters
     juce::AudioParameterChoice* aaxModeParam    = nullptr;  // 0=Analyze, 1=Apply
     juce::AudioParameterFloat*  aaxTargetParam  = nullptr;  // Target Level (dBFS)

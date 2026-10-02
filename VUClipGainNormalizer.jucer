@@ -4,7 +4,7 @@
               companyName="" companyCopyright="" companyWebsite="" companyEmail=""
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" cppLanguageStandard="17"
               projectType="audioplug" pluginFormats="buildStandalone" pluginName="VOX Normalizer"
-              pluginDesc="RMS normalizer for vocal clips" pluginManufacturer="Ryo"
+              pluginDesc="RMS normalizer for vocal clips" pluginManufacturer="tokyomeltdown"
               pluginManufacturerCode="Ryon" pluginCode="VCGn" pluginChannelConfigs="{1, 1},{2, 2}"
               pluginIsSynth="0" pluginWantsMidiInput="0" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="VoxNormalizerAU"

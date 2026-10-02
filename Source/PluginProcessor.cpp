@@ -47,7 +47,7 @@ VUClipGainNormalizerProcessor::VUClipGainNormalizerProcessor()
     // applicationName = getName() so the path matches the one JUCE uses
     {
         juce::PropertiesFile::Options opts;
-        opts.applicationName     = getName();   // "VU Clip Gain Normalizer" (with spaces)
+        opts.applicationName     = getName();   // "VOX Normalizer" (JucePlugin_Name)
         opts.filenameSuffix      = ".settings";
         opts.osxLibrarySubFolder = "Application Support";
 
@@ -81,7 +81,7 @@ VUClipGainNormalizerProcessor::VUClipGainNormalizerProcessor()
         // Suppress the feedback-loop warning banner.
         // JUCE Standalone defaults shouldMuteInput to true, so write false
         // explicitly to hide the warning from the next launch onwards.
-        // (There is no input bus and no input channels, so there is no feedback risk.)
+        // (No input device is ever opened, so there is no feedback risk.)
         if (! props.containsKey ("shouldMuteInput"))
             props.setValue ("shouldMuteInput", false);
 
@@ -146,6 +146,7 @@ void VUClipGainNormalizerProcessor::processBlock (juce::AudioBuffer<float>& buff
                                                    juce::MidiBuffer&)
 {
     // ---- AAX AudioSuite ----
+    // Unused since v1.2 dropped AAX (see build.sh): the Standalone always skips this branch.
     // wrapperType is set at runtime by the AAX wrapper, which is more reliable than a macro
     if (wrapperType != wrapperType_Standalone)
     {
