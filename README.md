@@ -69,6 +69,8 @@ and use the notarytool profile named in `NOTARY_PROFILE`; set both up for your o
 
 Only the **Standalone** format is built. AAX support was removed in v1.2.
 
+Regression tests for the processing live in [`tests/`](tests/README.md).
+
 ## Licence
 
 VOX Normalizer is licensed under the **GNU Affero General Public License v3.0**.
