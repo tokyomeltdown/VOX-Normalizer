@@ -33,11 +33,12 @@ phrase are left exactly as performed.
 - **Zoomable waveform** (1x–16x) with per-phrase RMS, gain and status readouts
 - **Whole file mode** for material with no clear gaps (karaoke, sustained takes)
 - **No hidden conversion** — load a WAV or AIFF and the sample rate, bit depth and
-  channel count come back untouched. MP3 is written out as WAV so it is never re-encoded
+  channel count come back untouched. MP3 is written out as WAV so it is never re-encoded.
+  A WAV's BWF time stamp is kept too, so the file spots back to its original position
 
 ## Requirements
 
-macOS, universal binary (Apple Silicon and Intel). No DAW needed — it runs standalone.
+macOS 11 or later, universal binary (Apple Silicon and Intel). No DAW needed — it runs standalone.
 
 ## Install
 
@@ -61,8 +62,8 @@ bash make_pkg.sh
 ```
 
 `build.sh` expects the Projucer at `~/Documents/JUCE/Projucer.app`. The signing and
-notarization scripts contain identifiers specific to this project's Apple Developer
-account, so you will need to edit them for your own.
+notarization scripts read the signing identity from `$SIGNER` or `~/.config/tokyomeltdown/signer`,
+and use the notarytool profile named in `NOTARY_PROFILE`; set both up for your own account.
 
 Only the **Standalone** format is built. AAX support was removed in v1.2.
 
@@ -111,11 +112,11 @@ VOX Normalizer はその作業を代わりにやります。テイクを読み�
 - 切れ目のない素材向けの **Whole file モード**（カラオケなど）
 - **余計な変換なし** — WAV と AIFF は、サンプルレート・ビット深度・チャンネル数を
   そのまま書き出します。MP3 を読み込んだときだけは、再エンコードで劣化させないために
-  WAV で書き出します
+  WAV で書き出します。WAV の BWF タイムスタンプも残るので、元の位置に戻せます
 
 ## 動作環境
 
-macOS（Apple Silicon・Intel 両対応のユニバーサルバイナリ）。DAW は不要です。
+macOS 11 以降（Apple Silicon・Intel 両対応のユニバーサルバイナリ）。DAW は不要です。
 
 ## インストール
 
