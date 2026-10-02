@@ -9,7 +9,7 @@
               pluginIsSynth="0" pluginWantsMidiInput="0" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="VoxNormalizerAU"
               aaxIdentifier="com.ryo.voxnormalizer" pluginVST3Category="Fx"
-              bundleIdentifier="com.ryo.voxnormalizer" version="1.2.0" jucerFormatVersion="1">
+              bundleIdentifier="com.ryo.voxnormalizer" version="1.3.0" jucerFormatVersion="1">
   <MAINGROUP id="maingrp" name="VUClipGainNormalizer">
     <GROUP id="srcgrp" name="Source">
       <FILE id="f00001" name="PluginProcessor.cpp" compile="1" resource="0"

@@ -30,7 +30,7 @@ fi
 SIGN_INST="Developer ID Installer: $SIGNER"
 NOTARY_PROFILE="VOXNotary"
 APP_NAME="VOX Normalizer"
-VERSION="1.2"
+VERSION="1.3"
 BUNDLE_ID="com.tokyomeltdown.voxnormalizer"
 
 # ---- Paths ----

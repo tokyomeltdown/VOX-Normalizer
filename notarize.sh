@@ -24,7 +24,7 @@ fi
 SIGN_ID="Developer ID Application: $SIGNER"
 NOTARY_PROFILE="VOXNotary"                                    # notarytool keychain profile
 APP_NAME="VOX Normalizer"                                     # product name (.app name)
-VERSION="1.2"                                                 # used in the zip file name
+VERSION="1.3"                                                 # used in the zip file name
 
 # ---- Paths ----
 ROOT="$(cd "$(dirname "$0")" && pwd)"
