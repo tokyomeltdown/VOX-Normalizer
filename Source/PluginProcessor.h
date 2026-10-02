@@ -156,7 +156,7 @@ public:
     // ---- v1.2 Step 2: crossfade at clip boundaries ----
     //
     // Applying gain as a hard step at a clip boundary produces a click, so a short
-    // gain ramp is placed at the head and tail of every clip.
+    // gain ramp is placed at every clip boundary (on the side with the higher gain).
     //
     // *** Call this from all three places: export, preview and waveform display. ***
     //     Reverting any one of them to a plain applyGain produces a bug where what

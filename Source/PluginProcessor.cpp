@@ -487,16 +487,26 @@ void VUClipGainNormalizerProcessor::moveClipBoundary (int clipIndex, bool isStar
 
 // ---- Applying the clip gains, crossfades included (shared implementation) ----
 //
-// A gain ramp of boundaryFadeSeconds is placed at the head and tail of every clip.
+// A gain ramp of boundaryFadeSeconds is placed at every transition between a clip
+// and its surroundings (the silence around it, or a neighbouring clip).
 //
-// - No head ramp when the clip starts at the beginning of the file
-// (there is nothing outside it to be discontinuous with; this is what stops
-// whole-file mode from fading the first 10ms of a song in)
-// - Likewise, no tail ramp when the clip ends at the end of the file
-// - When two clips touch (which boundary dragging allows), a single head ramp on
-// the later clip carries prevGain to thisGain. The earlier clip gets no tail ramp,
-// because two ramps would return to 1.0 in between and dip the level.
-// - Ramp length is capped at a third of the clip, so two ramps never overlap
+// v1.3: each ramp sits on whichever side of the transition has the HIGHER gain.
+// Every sample therefore receives at most the gain of the region it belongs to,
+// so Peak Ceiling holds through the ramps too. (v1.2 always put the ramps inside
+// the clip: a clip being turned down kept up to unity gain in its first and last
+// 10ms, and when two clips touched, the later clip's head got the earlier clip's
+// boost - a quiet clip at +12 dB next to a loud one clipped at 0 dBFS.)
+//
+// - A clip turned up ramps inside itself; a clip turned down ramps in the silence
+// outside it. If that silence is too short to hold the ramp (possible after
+// dragging a boundary), the ramp falls back inside the clip, where the gain is
+// still never above unity, so the output never exceeds the source there.
+// - When two clips touch (which boundary dragging allows), one ramp carries one
+// gain to the other, inside the clip with the higher gain. No ramp back to 1.0 in
+// between, because that would dip the level.
+// - No ramp at the very start or end of the file (nothing outside to be
+// discontinuous with; this is what stops whole-file mode fading the song in or out)
+// - Ramp length is capped at a third of a clip and half of a gap, so ramps never overlap
 void VUClipGainNormalizerProcessor::applyClipGains (juce::AudioBuffer<float>& buffer,
                                                     const std::vector<VirtualClip>&  clips,
                                                     const std::vector<ClipAnalysis>& analyses,
@@ -513,50 +523,105 @@ void VUClipGainNormalizerProcessor::applyClipGains (juce::AudioBuffer<float>& bu
     const size_t n = clips.size();
     const int rampMax = juce::jmax (1, (int) (sampleRate * boundaryFadeSeconds));
 
+    // Clip i clamped to the buffer, as [start, end)
+    auto clipStart = [&] (size_t i) { return (int) juce::jlimit ((int64_t) 0, (int64_t) numSamp, clips[i].startSample); };
+    auto clipEnd   = [&] (size_t i) { return (int) juce::jlimit ((int64_t) 0, (int64_t) numSamp, clips[i].startSample + clips[i].numSamples); };
+    auto gainOf    = [&] (size_t i) { return juce::Decibels::decibelsToGain (analyses[i].gainDb); };
+    auto rampFor   = [&] (int len)  { return juce::jmax (0, juce::jmin (rampMax, len / 3)); };
+
+    auto applyRamp = [&] (int from, int num, float g0, float g1)
+    {
+        if (num <= 0) return;
+        for (int ch = 0; ch < numCh; ++ch)
+            buffer.applyGainRamp (ch, from, num, g0, g1);
+    };
+
     for (size_t i = 0; i < n; ++i)
     {
-        const auto& clip = clips[i];
-
-        int start = (int) clip.startSample;
-        int len   = (int) clip.numSamples;
-
-        if (start < 0) { len += start; start = 0; }
-        if (start >= numSamp || len <= 0) continue;
-        if (start + len > numSamp) len = numSamp - start;
+        const int start = clipStart (i);
+        const int end   = clipEnd (i);
+        const int len   = end - start;
         if (len <= 0) continue;
 
-        const float gain = juce::Decibels::decibelsToGain (analyses[i].gainDb);
+        const float gain = gainOf (i);
+        const int   ramp = rampFor (len);
 
         // Does this clip touch its neighbour?
         const bool touchesPrev = (i > 0)
-            && (clips[i - 1].startSample + clips[i - 1].numSamples >= clip.startSample);
+            && (clips[i - 1].startSample + clips[i - 1].numSamples >= clips[i].startSample);
         const bool touchesNext = (i + 1 < n)
-            && (clip.startSample + clip.numSamples >= clips[i + 1].startSample);
+            && (clips[i].startSample + clips[i].numSamples >= clips[i + 1].startSample);
 
-        const float prevGain = touchesPrev
-            ? juce::Decibels::decibelsToGain (analyses[i - 1].gainDb)
-            : 1.0f;
+        // Ramps that end up inside this clip (length, and the gain at the far end)
+        int   headLen  = 0;
+        float headFrom = gain;
+        int   tailLen  = 0;
+        float tailTo   = gain;
 
-        const bool needStartRamp = (start > 0);
-        const bool needEndRamp   = (! touchesNext) && (start + len < numSamp);
-
-        const int ramp = juce::jmax (0, juce::jmin (rampMax, len / 3));
-
-        const int flatStart = start + (needStartRamp ? ramp : 0);
-        const int flatLen   = len   - (needStartRamp ? ramp : 0)
-                                    - (needEndRamp   ? ramp : 0);
-
-        for (int ch = 0; ch < numCh; ++ch)
+        // ---- Head ----
+        if (start > 0)
         {
-            if (needStartRamp && ramp > 0)
-                buffer.applyGainRamp (ch, start, ramp, prevGain, gain);
-
-            if (flatLen > 0)
-                buffer.applyGain (ch, flatStart, flatLen, gain);
-
-            if (needEndRamp && ramp > 0)
-                buffer.applyGainRamp (ch, start + len - ramp, ramp, gain, 1.0f);
+            if (touchesPrev)
+            {
+                // Inside this clip only when it has the higher (or equal) gain;
+                // otherwise the previous clip carries the ramp in its tail
+                const float prevGain = gainOf (i - 1);
+                if (gain >= prevGain)
+                {
+                    headLen  = juce::jmin (ramp, rampFor (clipEnd (i - 1) - clipStart (i - 1)));
+                    headFrom = prevGain;
+                }
+            }
+            else
+            {
+                const int gapLen = start - ((i > 0) ? clipEnd (i - 1) : 0);
+                if (gain >= 1.0f || gapLen / 2 < ramp)
+                {
+                    headLen  = ramp;
+                    headFrom = 1.0f;
+                }
+                else
+                {
+                    applyRamp (start - ramp, ramp, 1.0f, gain);   // turned down: fade in the silence before
+                }
+            }
         }
+
+        // ---- Tail ----
+        if (end < numSamp)
+        {
+            if (touchesNext)
+            {
+                const float nextGain = gainOf (i + 1);
+                if (gain > nextGain)
+                {
+                    tailLen = juce::jmin (ramp, rampFor (clipEnd (i + 1) - clipStart (i + 1)));
+                    tailTo  = nextGain;
+                }
+            }
+            else
+            {
+                const int gapLen = ((i + 1 < n) ? clipStart (i + 1) : numSamp) - end;
+                if (gain >= 1.0f || gapLen / 2 < ramp)
+                {
+                    tailLen = ramp;
+                    tailTo  = 1.0f;
+                }
+                else
+                {
+                    applyRamp (end, ramp, gain, 1.0f);            // turned down: fade in the silence after
+                }
+            }
+        }
+
+        applyRamp (start, headLen, headFrom, gain);
+
+        const int flatLen = len - headLen - tailLen;
+        if (flatLen > 0)
+            for (int ch = 0; ch < numCh; ++ch)
+                buffer.applyGain (ch, start + headLen, flatLen, gain);
+
+        applyRamp (end - tailLen, tailLen, gain, tailTo);
     }
 }
 
