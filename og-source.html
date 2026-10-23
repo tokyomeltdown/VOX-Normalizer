@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<!--
+  Source for docs/og-image.png. Rendered rather than drawn by hand so the card
+  keeps the page's colours when they change.
+
+      bash make-og.sh
+
+  1200x630 is what the social cards crop to. Same ground, grid and type as the
+  page, with the app icon on the right.
+-->
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{position:relative;background:#1c1c1e;color:#fcfcfc;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;
+    background-image:linear-gradient(rgba(252,252,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(252,252,252,.05) 1px,transparent 1px);
+    background-size:48px 48px;background-position:-1px -1px}
+  .left{position:absolute;left:72px;top:0;bottom:0;width:600px;display:flex;flex-direction:column;justify-content:center}
+  .k{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:#86868b;margin-bottom:26px}
+  h1{font-size:66px;line-height:1.04;font-weight:700;letter-spacing:-.03em}
+  .sub{margin-top:24px;font-size:23px;line-height:1.45;color:#a8a8ad;max-width:21em}
+  .foot{margin-top:30px;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;font-size:15px;letter-spacing:.06em;color:#86868b}
+  .foot b{color:#fcfcfc;font-weight:600}
+
+  /* icon.png has a transparent margin round the squircle (416 of 512 px), so
+     the hairline edge is drawn on a box the size of the squircle itself. The
+     artwork is dark on a dark ground; without the edge it floats loose. */
+  .edge{position:absolute;right:130px;top:50%;width:300px;height:300px;margin-top:-150px;border-radius:67px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.16),0 40px 90px rgba(0,0,0,.55)}
+  .icon{position:absolute;right:95px;top:50%;width:370px;height:370px;margin-top:-185px}
+</style>
+</head>
+<body>
+<div class="left">
+  <div class="k">VOX Normalizer · for macOS</div>
+  <h1>Every phrase, the same level.</h1>
+  <p class="sub">Drop in a vocal take. Each phrase gets one gain, and one file comes back.</p>
+  <p class="foot">macOS 11+ &nbsp;·&nbsp; Apple silicon &amp; Intel &nbsp;·&nbsp; <b>Free &amp; open source</b></p>
+</div>
+<div class="edge"></div>
+<img class="icon" src="docs/icon.png" alt="">
+</body>
+</html>

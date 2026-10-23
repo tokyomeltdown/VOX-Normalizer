@@ -3,510 +3,457 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOX Normalizer — Even out every phrase in a vocal take.</title>
-<meta name="description" content="VOX Normalizer is a free, open-source macOS app that levels a vocal take phrase by phrase and exports a single file. No DAW required. Static clip gain, not dynamic riding.">
-<meta property="og:title" content="VOX Normalizer — Even out every phrase in a vocal take.">
-<meta property="og:description" content="Free, open-source phrase-by-phrase vocal leveling for macOS. No DAW required.">
+<title>VOX Normalizer — Every phrase, the same level</title>
+<meta name="description" content="A free, open-source macOS app that gives each phrase of a vocal take one gain and writes one file back. No DAW needed. macOS 11+.">
+<meta name="theme-color" content="#1c1c1e">
+<link rel="canonical" href="https://tokyomeltdown.github.io/VOX-Normalizer/">
+<meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
+<meta property="og:title" content="VOX Normalizer — Every phrase, the same level">
+<meta property="og:description" content="Free and open source. Each phrase of a vocal take gets one gain, and one file comes back. No DAW needed.">
 <meta property="og:url" content="https://tokyomeltdown.github.io/VOX-Normalizer/">
 <meta property="og:image" content="https://tokyomeltdown.github.io/VOX-Normalizer/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="VOX Normalizer — Get the prep done fast. Spend the time mixing.">
+<meta property="og:image:alt" content="VOX Normalizer">
+<meta property="og:site_name" content="tokyomeltdown">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="VOX Normalizer — Even out every phrase in a vocal take.">
-<meta name="twitter:description" content="Free, open-source phrase-by-phrase vocal leveling for macOS.">
+<meta name="twitter:title" content="VOX Normalizer — Every phrase, the same level">
+<meta name="twitter:description" content="Free and open source. Each phrase of a vocal take gets one gain, and one file comes back. No DAW needed.">
 <meta name="twitter:image" content="https://tokyomeltdown.github.io/VOX-Normalizer/og-image.png">
-<meta name="theme-color" content="#ffffff">
-<link rel="canonical" href="https://tokyomeltdown.github.io/VOX-Normalizer/">
 <link rel="icon" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
 <style>
-:root{--bg:#fff;--bg2:#f5f5f7;--text:#1d1d1f;--muted:#6e6e73;--blue:#0071e3;--card:#f5f5f7;
-      --dark:#0b0b0f;--darkcard:#16161c;--coral:#d97757;--wave:#378add;
-      --ok:#6ae06a;--max:#efb854;--peak:#67b0ff;--clip:#ff5b52;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
-a{color:var(--blue);text-decoration:none;}
-.wrap{max-width:1024px;margin:0 auto;padding:0 24px;}
-nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08);}
-nav .inner{max-width:1024px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
-nav .brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--text);white-space:nowrap;}
-nav .brand img{width:24px;height:24px;border-radius:6px;}
-nav .right{display:flex;align-items:center;gap:12px;}
-.langbtn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:6px;}
-.langbtn.active{color:var(--text);font-weight:600;}
-.pill{display:inline-block;background:var(--blue);color:#fff;font-weight:500;padding:8px 20px;border-radius:980px;font-size:14px;white-space:nowrap;transition:background .2s;}
-.pill:hover{background:#0077ed;}
-.pill.big{padding:14px 32px;font-size:17px;}
-.pill.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue);}
-.pill.ghost:hover{background:var(--blue);color:#fff;}
-.hero{text-align:center;padding:104px 24px 64px;}
-.hero img.appicon{width:104px;height:104px;border-radius:24px;margin-bottom:32px;box-shadow:0 20px 50px rgba(0,0,0,.14);}
-.eyebrow{font-size:15px;font-weight:600;color:var(--muted);margin-bottom:14px;}
-h1{font-size:clamp(38px,6.6vw,68px);line-height:1.06;font-weight:700;letter-spacing:-.025em;}
-h1 .grad{background:linear-gradient(90deg,#e08a63,#d0563a);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.hero p.sub{color:var(--muted);font-size:clamp(18px,2.4vw,22px);max-width:640px;margin:24px auto 36px;letter-spacing:-.01em;}
-.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;}
-.meta{color:var(--muted);font-size:12px;margin-top:22px;}
-section{padding:88px 0;}
-.sec-head{text-align:center;max-width:700px;margin:0 auto 48px;}
-h2{font-size:clamp(28px,4.5vw,44px);font-weight:700;letter-spacing:-.02em;line-height:1.15;}
-.sec-head p{color:var(--muted);font-size:18px;margin-top:16px;}
-
-/* ---------- Interactive demo ---------- */
-.demosec{background:var(--dark);color:#f5f5f7;}
-.demosec h2{color:#f5f5f7;}
-.demosec .sec-head p{color:#a1a1aa;}
-.app{max-width:760px;margin:0 auto;background:#1c1c1e;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.45);}
-.app .titlebar{background:#2c2c2e;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.07);}
-.app .dot{width:11px;height:11px;border-radius:50%;}
-.app .tb-title{flex:1;text-align:center;font-size:12.5px;color:#c7c7cc;margin-right:44px;}
-.app .body{padding:16px;}
-#wave{width:100%;height:230px;display:block;border-radius:6px;background:#0d0d1a;}
-.seg{display:flex;background:#2c2c2e;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:2px;margin:16px auto 0;width:230px;}
-.seg button{flex:1;background:none;border:none;color:#98989d;font-size:13px;font-weight:600;padding:7px 0;border-radius:6px;cursor:pointer;font-family:inherit;transition:background .18s,color .18s;}
-.seg button.on{background:var(--coral);color:#fff;}
-.card{background:#2c2c2e;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px 16px;margin-top:16px;}
-.card .k{font-size:12.5px;font-weight:700;color:var(--coral);margin-bottom:10px;}
-.row{display:flex;align-items:center;gap:12px;margin-bottom:11px;}
-.row:last-child{margin-bottom:0;}
-.row label{font-size:12.5px;color:#98989d;width:118px;flex:none;}
-.row output{font-size:12.5px;color:#fcfcfc;width:82px;text-align:right;flex:none;font-variant-numeric:tabular-nums;}
-input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:4px;border-radius:2px;background:#48484a;outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:pointer;}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:pointer;}
-.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:20px;font-size:12.5px;color:#a1a1aa;}
-.legend b{font-weight:700;}
-.demo-note{max-width:640px;margin:22px auto 0;text-align:center;color:#8b8b93;font-size:13px;}
-
-/* ---------- Feature cards ---------- */
-.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
-.bcard{background:var(--card);border-radius:24px;padding:32px 30px;grid-column:span 3;transition:transform .3s ease;}
-.bcard:hover{transform:translateY(-3px);}
-.bcard.wide{grid-column:span 6;}
-.bcard.third{grid-column:span 2;}
-.bcard .k{font-size:13px;font-weight:600;color:var(--coral);text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px;}
-.bcard h3{font-size:22px;font-weight:600;letter-spacing:-.015em;margin-bottom:10px;line-height:1.25;}
-.bcard p{color:var(--muted);font-size:15px;}
-.darksec{background:var(--dark);color:#f5f5f7;}
-.darksec h2{color:#f5f5f7;}
-.darksec .sec-head p{color:#a1a1aa;}
-.darksec .bcard{background:var(--darkcard);}
-.darksec .bcard h3{color:#f5f5f7;}
-.darksec .bcard p{color:#a1a1aa;}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.step{background:var(--card);border-radius:20px;padding:28px 26px;}
-.step .n{width:30px;height:30px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;margin-bottom:14px;}
-.step h3{font-size:18px;font-weight:600;margin-bottom:8px;}
-.step p{color:var(--muted);font-size:14.5px;}
-.finale{text-align:center;padding:112px 24px;}
-footer{background:var(--bg2);padding:40px 0 60px;color:var(--muted);font-size:13px;}
-footer .links{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:20px;}
-footer a{color:var(--muted);}
-footer a:hover{color:var(--text);}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
-.reveal.on{opacity:1;transform:none;}
-.lang-ja{display:none;}
-body.ja .lang-ja{display:block;}
-body.ja .lang-en{display:none;}
-span.lang-ja,a.lang-ja{display:none;}
-body.ja span.lang-ja,body.ja a.lang-ja{display:inline;}
-body.ja span.lang-en,body.ja a.lang-en{display:none;}
-@media(max-width:760px){.bcard,.bcard.third{grid-column:span 6;}.steps{grid-template-columns:1fr;}}
-@media(max-width:520px){
-  #wave{height:190px;}
-  .wrap{padding:0 16px;}
-  nav .inner{padding:10px 16px;gap:8px;}
-  nav .brand{font-size:15px;}
-  nav .brand img{width:22px;height:22px;}
-  .pill{padding:7px 14px;font-size:13px;}
-  .app .body{padding:12px;}
-  .row{gap:8px;flex-wrap:wrap;}
-  .row label{width:auto;flex:1 0 100%;margin-bottom:-4px;}
-  .row output{width:auto;min-width:70px;}
-  .seg{width:100%;max-width:260px;}
+/* The same family as the hub, EQ Mirror and LUFSBar Pro: hairline grid, small
+   spaced-out mono labels, plain buttons, one accent. The ground and the accent
+   are the app's own: near-black #1c1c1e and the coral of its controls. */
+:root{
+  --bg:#1c1c1e; --ink:#fcfcfc; --sub:#a8a8ad; --muted:#86868b; --line:rgba(252,252,252,.12); --grid:rgba(252,252,252,.05);
+  --coral:#d97757;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  /* The app's palette (Source/VoxLookAndFeel.h, WaveformView.h) */
+  --a-bg:#1c1c1e; --a-panel:#2c2c2e; --a-control:#48484a; --a-text:#fcfcfc; --a-sub:#98989d; --a-hair:rgba(255,255,255,.1);
 }
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Hiragino Sans","Noto Sans JP",sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+/* Every string is present twice; one class on <body> picks the language. */
+.en,.ja{display:none}
+body.lang-en .en{display:initial} body.lang-ja .ja{display:initial}
+/* Break Japanese at phrase boundaries where the browser can (Chrome, Edge) */
+body.lang-ja{word-break:auto-phrase}
+.nw{white-space:nowrap}
+
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------------- top bar ---------------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(28,28,30,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.top .inner{max-width:1040px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-size:15px;letter-spacing:-.01em}
+.brand img{width:22px;height:22px;border-radius:5px}
+.brand b{font-weight:700}
+.right{display:flex;align-items:center;gap:12px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--muted);font:inherit;font-size:12px;padding:5px 11px;cursor:pointer}
+.lang button.on{background:var(--ink);color:var(--bg);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:600;font-size:14px;padding:10px 20px;white-space:nowrap;transition:background .3s,box-shadow .3s,transform .3s var(--ease)}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn.solid:hover{box-shadow:0 12px 36px -10px rgba(217,119,87,.6)}
+.btn.ghost{border:1px solid rgba(252,252,252,.28);color:var(--ink)}
+.btn.ghost:hover{background:rgba(252,252,252,.08)}
+.btn.big{font-size:16px;padding:14px 26px}
+
+/* ---------------- hero ---------------- */
+.hero{padding:96px 0 40px;position:relative;z-index:0}
+/* The grid sits behind the headline only and fades out before the demo, so it
+   never runs a few pixels off the ruled lines of the sections below. */
+.hero::before{content:"";position:absolute;z-index:-1;top:0;left:50%;width:100vw;height:620px;transform:translateX(-50%);pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:48px 48px;background-position:center -1px;
+  -webkit-mask-image:linear-gradient(#000 45%,transparent 92%);mask-image:linear-gradient(#000 45%,transparent 92%)}
+.hero h1{font-size:clamp(34px,6.2vw,68px);line-height:1.04;font-weight:700;letter-spacing:-.03em;margin:18px 0 20px;max-width:14ch}
+body.lang-ja .hero h1{max-width:none;font-size:clamp(28px,5.4vw,56px);line-height:1.18;letter-spacing:-.01em}
+.hero p.lede{color:var(--sub);font-size:clamp(17px,2vw,20px);max-width:34em}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.fine{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);margin-top:16px}
+
+/* ---------------- the demo: the top half of the app's window ---------------- */
+.demo{margin:56px 0 0}
+.screen{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;padding:44px 20px;
+  background:radial-gradient(120% 140% at 50% 0%,#2a2a2d 0%,#19191b 60%,#141416 100%)}
+.win{position:relative;width:100%;max-width:620px;margin:0 auto;background:var(--a-bg);border-radius:12px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 30px 80px -20px rgba(0,0,0,.7);color:var(--a-text)}
+.tb{height:32px;display:flex;align-items:center;gap:8px;padding:0 12px;background:#2a2a2c;border-bottom:1px solid rgba(0,0,0,.4)}
+.tb i{width:12px;height:12px;border-radius:50%;display:block}
+.tb b{font-size:13px;font-weight:600;color:#d7d7da;margin-left:10px}
+.wbody{padding:12px 20px 20px}
+.file{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.file .name{font-size:17px;font-weight:700;line-height:24px}
+.file .info{font-size:12px;color:var(--a-sub);line-height:18px;margin-top:2px}
+.fakebtn{background:var(--a-panel);color:var(--coral);font-size:13px;font-weight:700;border-radius:7px;padding:5px 16px;white-space:nowrap;margin-top:-2px}
+#wave{display:block;width:100%;height:132px;margin-top:22px;border-radius:4px}
+.ctrl{position:relative;display:flex;justify-content:center;align-items:center;gap:12px;margin-top:20px}
+.play{width:34px;height:34px;border-radius:50%;background:var(--coral);display:grid;place-items:center;flex-shrink:0}
+.play::after{content:"";border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+.seg{display:flex;width:200px;height:30px;padding:2px;background:var(--a-panel);border-radius:7px;box-shadow:inset 0 0 0 1px var(--a-hair)}
+.seg button{flex:1;background:none;border:0;border-radius:5px;color:var(--a-sub);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.seg button.on{background:var(--coral);color:#fff}
+.seg button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+/* A small pointer to Normalized until it has been pressed once. */
+.segwrap{position:relative}
+.hint{position:absolute;top:100%;right:0;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);
+  white-space:nowrap;transition:opacity .3s;animation:nudge 1.8s var(--ease) infinite}
+.win.used .hint{opacity:0}
+@keyframes nudge{0%,100%{translate:0 0}50%{translate:0 -3px}}
+.card{background:var(--a-panel);border-radius:10px;box-shadow:inset 0 0 0 1px var(--a-hair);padding:12px 16px 14px;margin-top:40px}
+.card .t{font-size:13px;font-weight:700;color:var(--coral)}
+.row{margin-top:8px}
+.row .lv{display:flex;justify-content:space-between;font-size:12px;line-height:18px}
+.row .lv span:first-child{color:var(--a-sub)}
+.row output{font-variant-numeric:tabular-nums}
+/* The app's slider: a 4px groove, coral up to the knob, an 18px white knob. */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--coral) var(--p),var(--a-control) var(--p))}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--coral) var(--p),var(--a-control) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;margin-top:-7px;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+input[type=range]:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
+.demo .say{display:flex;justify-content:flex-end;margin-top:14px}
+
+/* ---------------- three things ---------------- */
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:96px}
+.three>div{padding:28px 24px 30px 0}
+.three>div+div{padding-left:24px;border-left:1px solid var(--line)}
+.three h3{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:12px 0 8px}
+.three p{color:var(--sub);font-size:14.5px}
+
+/* ---------------- free ---------------- */
+.buy{padding:96px 0 0;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end}
+.buy .price{font-size:clamp(56px,8vw,88px);font-weight:700;letter-spacing:-.04em;line-height:1;margin-top:14px}
+.buy ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--sub)}
+.buy .side p{color:var(--sub);font-size:15px;margin-bottom:22px}
+
+/* ---------------- spec ---------------- */
+.spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:72px}
+.spec>div{padding:24px 20px 26px 0}
+.spec>div+div{padding-left:20px;border-left:1px solid var(--line)}
+.spec .v{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:10px 0 6px}
+.spec p{color:var(--muted);font-size:13.5px}
+
+.more{margin:56px 0 0;color:var(--sub);font-size:15px}
+.more a{border-bottom:1px solid rgba(252,252,252,.35)}
+.more a:hover{border-color:var(--ink)}
+
+footer{margin-top:96px;border-top:1px solid var(--line);padding:30px 0 56px;color:var(--muted);font-size:12.5px;background:rgba(28,28,30,.9)}
+footer .links{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:14px}
+footer a:hover{color:var(--ink)}
+
+@media(max-width:820px){
+  .three,.spec{grid-template-columns:1fr}
+  .three>div,.three>div+div,.spec>div,.spec>div+div{padding:22px 0;border-left:0}
+  .three>div+div,.spec>div+div{border-top:1px solid var(--line)}
+  .buy{grid-template-columns:1fr;gap:12px}
+  .hero{padding-top:64px}
+}
+@media(max-width:560px){
+  .screen{padding:24px 10px}
+  .wbody{padding:12px 12px 16px}
+  .file .fakebtn{display:none}
+  .brand span{display:none}
+  .top .inner{padding:10px 16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
-<body>
-<nav>
-  <div class="inner">
-    <div class="brand"><img src="icon.png" alt=""><span>VOX Normalizer</span></div>
-    <div class="right">
-      <button class="langbtn" id="btn-en" type="button" aria-pressed="true"  onclick="setLang('en')">EN</button>
-      <button class="langbtn" id="btn-ja" type="button" aria-pressed="false" onclick="setLang('ja')">JA</button>
-      <a class="pill" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="lang-en" lang="en">Download</span><span class="lang-ja" lang="ja">ダウンロード</span></a>
-    </div>
-  </div>
-</nav>
+<body class="lang-en">
 
-<header class="hero">
-  <img class="appicon" src="icon.png" alt="VOX Normalizer icon">
-  <div class="lang-en" lang="en">
-    <p class="eyebrow">VOX Normalizer for macOS</p>
-    <h1>Every phrase,<br><span class="grad">the same level.</span></h1>
-    <p class="sub">Load a vocal take. Get back one file with every phrase evened out. No DAW required — and your workflow doesn't change at all.</p>
+<header class="top"><div class="inner">
+  <a class="brand" href="./"><img src="icon.png" alt=""><span><b>VOX Normalizer</b></span></a>
+  <div class="right">
+    <div class="lang"><button id="btn-en" class="on" aria-pressed="true">EN</button><button id="btn-ja" aria-pressed="false">日本語</button></div>
+    <a class="btn solid" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download</span><span class="ja">ダウンロード</span></a>
   </div>
-  <div class="lang-ja" lang="ja">
-    <p class="eyebrow">VOX Normalizer for macOS</p>
-    <h1>どのフレーズも、<br><span class="grad">同じ音量に。</span></h1>
-    <p class="sub">ボーカルを読み込むだけ。フレーズごとの音量をそろえた1本のファイルを書き出します。DAW は要りません。いつもの手順を変えないまま、コンプ前の下ごしらえだけが終わります。</p>
-  </div>
-  <div class="cta">
-    <a class="pill big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="lang-en" lang="en">Download for Mac</span><span class="lang-ja" lang="ja">Macにダウンロード</span></a>
-    <a class="pill big ghost" href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener">GitHub</a>
-  </div>
-  <p class="meta">macOS · Apple silicon &amp; Intel · Signed &amp; notarized · Free &amp; open source (AGPLv3)</p>
-</header>
+</div></header>
 
-<section class="demosec">
- <div class="wrap">
-  <div class="sec-head reveal">
-    <div class="lang-en" lang="en">
-      <h2>Try it right here.</h2>
-      <p>This is the real algorithm, running in your browser. Move the sliders and watch every phrase line up.</p>
-    </div>
-    <div class="lang-ja" lang="ja">
-      <h2>ここで試せます。</h2>
-      <p>アプリと同じ計算を、そのままブラウザで動かしています。スライダーを動かすと、フレーズがそろっていきます。</p>
-    </div>
-  </div>
+<main class="wrap">
 
-  <div class="app reveal">
-    <div class="titlebar">
-      <span class="dot" style="background:#ff5f57"></span>
-      <span class="dot" style="background:#febc2e"></span>
-      <span class="dot" style="background:#28c840"></span>
-      <span class="tb-title">VOX Normalizer</span>
-    </div>
-    <div class="body">
-      <canvas id="wave" role="img"
-              aria-label="Waveform of seven vocal phrases. Moving the sliders levels them to the target."></canvas>
-      <noscript>
-        <p style="color:#a1a1aa;font-size:14px;padding:24px 4px 4px;">
-          <span class="lang-en" lang="en">This demo needs JavaScript. The app itself does not.</span>
-          <span class="lang-ja" lang="ja">このデモには JavaScript が必要です（アプリ本体には不要です）。</span>
-        </p>
-      </noscript>
-
-      <div class="seg">
-        <button id="seg-o" class="on" onclick="setMode(0)">Original</button>
-        <button id="seg-n" onclick="setMode(1)">Normalized</button>
-      </div>
-
-      <div class="card">
-        <div class="k">Normalize Settings</div>
-        <div class="row">
-          <label>Target Level</label>
-          <input type="range" id="target" min="-24" max="-12" step="0.5" value="-18">
-          <output id="target-v">-18.0 dBFS</output>
-        </div>
-        <div class="row">
-          <label>Max Gain (+/- dB)</label>
-          <input type="range" id="maxg" min="3" max="24" step="0.5" value="12">
-          <output id="maxg-v">+/- 12.0 dB</output>
-        </div>
-        <div class="row">
-          <label>Peak Ceiling</label>
-          <input type="range" id="peak" min="-6" max="0" step="0.1" value="-1">
-          <output id="peak-v">-1.0 dBFS</output>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="legend reveal">
-    <span><b style="color:var(--ok)">OK</b> <span class="lang-en" lang="en">hit the target</span><span class="lang-ja" lang="ja">目標どおり</span></span>
-    <span><b style="color:var(--max)">MAX</b> <span class="lang-en" lang="en">limited by Max Gain</span><span class="lang-ja" lang="ja">Max Gain で制限</span></span>
-    <span><b style="color:var(--peak)">PEAK</b> <span class="lang-en" lang="en">limited by Peak Ceiling</span><span class="lang-ja" lang="ja">Peak Ceiling で制限</span></span>
-    <span><b style="color:var(--clip)">CLIP</b> <span class="lang-en" lang="en">over the ceiling</span><span class="lang-ja" lang="ja">上限を超過</span></span>
-  </div>
-  <p class="demo-note reveal">
-    <span class="lang-en" lang="en">Phrase #4 has a plosive — quiet overall, but one very loud peak. It is already held back at the default settings. Raise Target Level toward -12 and watch the rest hit their ceiling too. This is exactly what the app shows you before you export.</span>
-    <span class="lang-ja" lang="ja">#4 は破裂音の入ったフレーズです。全体は小さいのにピークだけが飛び出していて、初期設定の時点ですでに抑えられています。Target Level を -12 に向けて上げていくと、ほかのフレーズも次々に上限へ当たります。アプリが書き出し前に見せてくれるのは、この情報です。</span>
+<section class="hero">
+  <div class="k"><span class="en">VOX Normalizer · for macOS</span><span class="ja">VOX Normalizer · macOS</span></div>
+  <h1><span class="en">Every phrase, the same level.</span><span class="ja">どのフレーズも、<br>同じ音量に。</span></h1>
+  <p class="lede">
+    <span class="en">Drop in a vocal take. Each phrase gets one gain, and one file comes back. No DAW needed.</span>
+    <span class="ja">ボーカルのテイクを放り込むだけ。フレーズごとにゲインを1つ決めて、1本のファイルで書き出します。DAW は要りません。</span>
   </p>
- </div>
+  <div class="cta">
+    <a class="btn solid big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
+    <a class="btn ghost big" href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener"><span class="en">Source on GitHub</span><span class="ja">GitHub でソースを見る</span></a>
+  </div>
+  <p class="fine"><span class="nw">macOS 11+</span> · <span class="nw">Apple silicon &amp; Intel</span> · <span class="nw"><span class="en">Signed &amp; notarized</span><span class="ja">署名・公証済み</span></span></p>
+
+  <!-- A drawing of the app rather than a screenshot: sharp at any size, and it
+       behaves like the app where it counts. Original / Normalized switches the
+       waveform, and the three sliders re-run the same calculation as the app's
+       analyzeClips() when they are let go. -->
+  <div class="demo">
+    <div class="screen">
+      <div class="win" id="win">
+        <div class="tb" aria-hidden="true"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#4d4d50"></i><b>VOX Normalizer</b></div>
+        <div class="wbody">
+          <div class="file">
+            <div><div class="name">take.wav</div><div class="info">WAV  |  Mono  |  48.0 kHz  |  24 bit  |  0:18.00</div></div>
+            <div class="fakebtn" aria-hidden="true">Open File...</div>
+          </div>
+          <canvas id="wave" role="img" aria-label="Waveform of five vocal phrases, with the gain and status of each phrase underneath."></canvas>
+          <noscript><p style="color:var(--a-sub);font-size:13px;margin-top:8px"><span class="en">This demo needs JavaScript. The app itself does not.</span><span class="ja">このデモには JavaScript が必要です（アプリ本体には不要です）。</span></p></noscript>
+          <div class="ctrl">
+            <span class="play" aria-hidden="true"></span>
+            <div class="segwrap">
+              <div class="seg" role="group" aria-label="Show"><button id="seg-o" class="on" aria-pressed="true">Original</button><button id="seg-n" aria-pressed="false">Normalized</button></div>
+              <div class="hint" aria-hidden="true"><span class="en">↑ Press Normalized</span><span class="ja">↑ Normalized を押す</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="t">Normalize Settings</div>
+            <div class="row"><div class="lv"><span>Target Level</span><output id="target-v" for="target">-18.0 dBFS</output></div>
+              <input type="range" id="target" min="-24" max="-12" step="0.5" value="-18" aria-label="Target Level"></div>
+            <div class="row"><div class="lv"><span>Max Gain (+/- dB)</span><output id="maxg-v" for="maxg">+/- 12.0 dB</output></div>
+              <input type="range" id="maxg" min="3" max="24" step="0.5" value="12" aria-label="Max Gain"></div>
+            <div class="row"><div class="lv"><span>Peak Ceiling</span><output id="peak-v" for="peak">-1.0 dBFS</output></div>
+              <input type="range" id="peak" min="-6" max="0" step="0.1" value="-1" aria-label="Peak Ceiling"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="say"><span class="k"><span class="en">A drawing of the app</span><span class="ja">画面はイメージです</span></span></div>
+  </div>
 </section>
 
-<section>
- <div class="wrap">
-  <div class="sec-head reveal">
-    <div class="lang-en" lang="en">
-      <h2>Static clip gain.<br>Not a level rider.</h2>
-      <p>Level riders squash the life out of a performance. VOX Normalizer sets one gain per phrase and leaves everything inside that phrase exactly as you sang it.</p>
-    </div>
-    <div class="lang-ja" lang="ja">
-      <h2>静的なクリップゲイン。<br>レベルライダーではありません。</h2>
-      <p>動的なライダーは、歌の抑揚まで潰してしまいます。VOX Normalizer が決めるのは、フレーズごとに1つのゲインだけ。フレーズの中の強弱は、歌ったままです。</p>
-    </div>
+<section class="three">
+  <div>
+    <div class="k">01 · <span class="en">Phrases</span><span class="ja">フレーズ</span></div>
+    <h3><span class="en">Split at the silences.</span><span class="ja">無音で区切る。</span></h3>
+    <p><span class="en">Phrases are found from the gaps between them. If a split lands in the wrong place, drag the boundary.</span><span class="ja">フレーズの切れ目は無音から自動で見つけます。区切りがずれたら、境界をドラッグして直せます。</span></p>
   </div>
-  <div class="bento">
-    <div class="bcard reveal">
-      <div class="k"><span class="lang-en" lang="en">Automatic</span><span class="lang-ja" lang="ja">自動検出</span></div>
-      <h3><span class="lang-en" lang="en">Finds the phrases for you</span><span class="lang-ja" lang="ja">フレーズは自動で見つかる</span></h3>
-      <p><span class="lang-en" lang="en">An RMS-window detector with hysteresis splits the take at the silences — it won't fall apart on breaths or room tone.</span><span class="lang-ja" lang="ja">無音を手がかりに、RMS 窓＋ヒステリシスで区切ります。ブレスや部屋鳴り程度では判定がぶれません。</span></p>
-    </div>
-    <div class="bcard reveal">
-      <div class="k"><span class="lang-en" lang="en">Yours to fix</span><span class="lang-ja" lang="ja">手動調整</span></div>
-      <h3><span class="lang-en" lang="en">Drag any boundary</span><span class="lang-ja" lang="ja">納得いかない区切りは、手で</span></h3>
-      <p><span class="lang-en" lang="en">Detection got a split wrong? Drag the boundary in the waveform. Sample accurate, and everything recalculates instantly.</span><span class="lang-ja" lang="ja">思ったところで切れていなければ、波形上で境界をドラッグしてください。サンプル単位で動かせて、離した瞬間に計算し直します。</span></p>
-    </div>
-    <div class="bcard wide reveal">
-      <div class="k"><span class="lang-en" lang="en">Peak Ceiling</span><span class="lang-ja" lang="ja">Peak Ceiling</span></div>
-      <h3><span class="lang-en" lang="en">One plosive can never clip your export</span><span class="lang-ja" lang="ja">破裂音1発で書き出しが歪むことはありません</span></h3>
-      <p><span class="lang-en" lang="en">Matching RMS alone can push peaks past 0 dBFS and distort on export. VOX Normalizer caps the gain so the output never crosses your ceiling — and tells you which phrases were held back, before you save.</span><span class="lang-ja" lang="ja">RMS だけを合わせにいくと、ピークが 0 dBFS を超えて書き出しで歪みます。VOX Normalizer は上限を超えない範囲までゲインを抑え、どのフレーズを抑えたのかを保存前に表示します。</span></p>
-    </div>
-    <div class="bcard reveal">
-      <div class="k"><span class="lang-en" lang="en">A/B</span><span class="lang-ja" lang="ja">A/B</span></div>
-      <h3><span class="lang-en" lang="en">Hear it before you commit</span><span class="lang-ja" lang="ja">書き出す前に、聴き比べ</span></h3>
-      <p><span class="lang-en" lang="en">Switch between the original and the normalized result while it plays, on a zoomable waveform.</span><span class="lang-ja" lang="ja">再生したまま元音とノーマライズ後を切り替えられます。波形はズームできます。</span></p>
-    </div>
-    <div class="bcard reveal">
-      <div class="k"><span class="lang-en" lang="en">No hidden conversion</span><span class="lang-ja" lang="ja">余計な変換なし</span></div>
-      <h3><span class="lang-en" lang="en">Same rate, depth and channels</span><span class="lang-ja" lang="ja">WAV と AIFF は、そのままの形で</span></h3>
-      <p><span class="lang-en" lang="en">Load WAV or AIFF and the sample rate, bit depth and channel count come back untouched. MP3 is written out as WAV, so it is never re-encoded.</span><span class="lang-ja" lang="ja">WAV と AIFF は、サンプルレート・ビット深度・チャンネル数をそのまま書き出します。MP3 を読み込んだときだけは、再エンコードで劣化させないために WAV で書き出します。</span></p>
-    </div>
+  <div>
+    <div class="k">02 · Peak Ceiling</div>
+    <h3><span class="en">A plosive won't clip it.</span><span class="ja">破裂音でも割れない。</span></h3>
+    <p><span class="en">Gain stops at your Peak Ceiling, and the phrases it held back are marked PEAK.</span><span class="ja">ゲインは Peak Ceiling の手前で止まり、抑えたフレーズには PEAK と出ます。</span></p>
   </div>
- </div>
+  <div>
+    <div class="k">03 · <span class="en">Export</span><span class="ja">書き出し</span></div>
+    <h3><span class="en">One file, as it came in.</span><span class="ja">1本のファイルを、元の形式で。</span></h3>
+    <p><span class="en">Sample rate, bit depth and channels stay the same, and a WAV keeps its BWF time stamp, so it lines back up in your session.</span><span class="ja">サンプルレート・ビット深度・チャンネル数はそのまま。WAV なら BWF タイムスタンプも残るので、セッションの元の位置に戻せます。</span></p>
+  </div>
 </section>
 
-<section style="padding-top:0;">
- <div class="wrap">
-  <div class="sec-head reveal">
-    <div class="lang-en" lang="en"><h2>Three steps.</h2></div>
-    <div class="lang-ja" lang="ja"><h2>手順は3つ。</h2></div>
+<section class="buy" id="free">
+  <div>
+    <div class="k"><span class="en">Open source</span><span class="ja">オープンソース</span></div>
+    <div class="price"><span class="en">Free</span><span class="ja">無料</span></div>
+    <ul>
+      <li>AGPLv3</li>
+      <li><span class="en">No account</span><span class="ja">アカウント不要</span></li>
+      <li><span class="en">Works offline</span><span class="ja">オフラインで動作</span></li>
+      <li><span class="en">Source on GitHub</span><span class="ja">ソースは GitHub</span></li>
+    </ul>
   </div>
-  <div class="steps">
-    <div class="step reveal">
-      <div class="n">1</div>
-      <h3><span class="lang-en" lang="en">Drop in a take</span><span class="lang-ja" lang="ja">テイクを放り込む</span></h3>
-      <p><span class="lang-en" lang="en">Drag a file onto the window, or use Open File. Phrases are detected right away.</span><span class="lang-ja" lang="ja">ウィンドウにドラッグするか、Open File で選ぶだけ。読み込んだ時点でフレーズが検出されています。</span></p>
-    </div>
-    <div class="step reveal">
-      <div class="n">2</div>
-      <h3><span class="lang-en" lang="en">Set the target</span><span class="lang-ja" lang="ja">目標を決める</span></h3>
-      <p><span class="lang-en" lang="en">-18 dBFS suits most vocals. Check the status of each phrase on the waveform.</span><span class="lang-ja" lang="ja">ボーカルなら -18 dBFS から。どのフレーズがどう処理されたかは、波形の下に出ます。</span></p>
-    </div>
-    <div class="step reveal">
-      <div class="n">3</div>
-      <h3><span class="lang-en" lang="en">Save As…</span><span class="lang-ja" lang="ja">Save As… で書き出す</span></h3>
-      <p><span class="lang-en" lang="en">One file comes out, ready to drop back into your session — before the compressor.</span><span class="lang-ja" lang="ja">出てくるのは1本のファイルだけ。そのままセッションに戻して、コンプの前に置けます。</span></p>
+  <div class="side">
+    <p><span class="en">Read the code, build it yourself, or open an issue.</span><span class="ja">コードを読むのも、自分でビルドするのも、Issue を立てるのも自由です。</span></p>
+    <div class="cta" style="margin-top:0">
+      <a class="btn solid big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
+      <a class="btn ghost big" href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
- </div>
 </section>
 
-<section class="darksec">
- <div class="wrap">
-  <div class="sec-head reveal">
-    <div class="lang-en" lang="en">
-      <h2>Free, and yours to inspect.</h2>
-      <p>A small app that does one thing. Nothing is hidden.</p>
-    </div>
-    <div class="lang-ja" lang="ja">
-      <h2>無料で、中身も見られます。</h2>
-      <p>1つのことだけをする小さなアプリです。隠しているものはありません。</p>
-    </div>
+<section class="spec">
+  <div>
+    <div class="k"><span class="en">Files</span><span class="ja">ファイル</span></div>
+    <div class="v">WAV · AIFF · MP3</div>
+    <p><span class="en">Mono, stereo or more channels. MP3 is exported as WAV.</span><span class="ja">モノ・ステレオ・多チャンネル。MP3 は WAV で書き出します。</span></p>
   </div>
-  <div class="bento">
-    <div class="bcard third reveal">
-      <h3><span class="lang-en" lang="en">No network. No accounts.</span><span class="lang-ja" lang="ja">通信なし。アカウント不要。</span></h3>
-      <p><span class="lang-en" lang="en">It reads a file and writes a file. That's the whole story.</span><span class="lang-ja" lang="ja">ファイルを読んで、ファイルを書く。それだけです。</span></p>
-    </div>
-    <div class="bcard third reveal">
-      <h3><span class="lang-en" lang="en">Signed &amp; notarized</span><span class="lang-ja" lang="ja">署名・公証済み</span></h3>
-      <p><span class="lang-en" lang="en">Installs from a signed .pkg with no Gatekeeper warnings.</span><span class="lang-ja" lang="ja">署名済み .pkg からインストール。Gatekeeper の警告は出ません。</span></p>
-    </div>
-    <div class="bcard third reveal">
-      <h3><span class="lang-en" lang="en">Open source (AGPLv3)</span><span class="lang-ja" lang="ja">オープンソース（AGPLv3）</span></h3>
-      <p><span class="lang-en" lang="en">Read it, build it, or file an issue on GitHub.</span><span class="lang-ja" lang="ja">ソースを読むのも、自分でビルドするのも、Issue を立てるのも自由です。</span></p>
-    </div>
+  <div>
+    <div class="k"><span class="en">System</span><span class="ja">動作環境</span></div>
+    <div class="v">macOS 11+</div>
+    <p><span class="en">Apple silicon &amp; Intel. Signed and notarized.</span><span class="ja">Apple silicon・Intel。<span class="nw">署名・公証済み。</span></span></p>
   </div>
- </div>
+  <div>
+    <div class="k"><span class="en">Gain</span><span class="ja">ゲイン</span></div>
+    <div class="v"><span class="en">Static</span><span class="ja">静的</span></div>
+    <p><span class="en">One gain per phrase, with 10 ms ramps at the edges. Not a level rider.</span><span class="ja">フレーズごとにゲインは1つ。端に 10ms のランプを入れるだけで、レベルライダーではありません。</span></p>
+  </div>
+  <div>
+    <div class="k"><span class="en">Privacy</span><span class="ja">プライバシー</span></div>
+    <div class="v"><span class="en">Offline</span><span class="ja">オフライン</span></div>
+    <p><span class="en">No network, no account. It reads a file and writes a file.</span><span class="ja">通信もアカウントもありません。ファイルを読んで、ファイルを書くだけです。</span></p>
+  </div>
 </section>
 
-<section class="finale">
-  <div class="lang-en" lang="en"><h2>Get the prep done fast.<br>Spend the time mixing.</h2></div>
-  <div class="lang-ja" lang="ja"><h2>下ごしらえは、最短で。<br>時間は、ミックスに。</h2></div>
-  <div class="cta" style="margin-top:34px;">
-    <a class="pill big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="lang-en" lang="en">Download for Mac — Free</span><span class="lang-ja" lang="ja">無料でダウンロード</span></a>
-  </div>
-  <p class="meta">VOX_Normalizer.pkg · Signed &amp; notarized</p>
-</section>
+<p class="more"><a href="https://tokyomeltdown.github.io/" target="_blank" rel="noopener"><span class="en">More tools from tokyomeltdown →</span><span class="ja">tokyomeltdown のほかのツール →</span></a></p>
+
+</main>
 
 <footer>
  <div class="wrap">
   <div class="links">
     <a href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://github.com/tokyomeltdown/VOX-Normalizer/blob/main/README.md" target="_blank" rel="noopener">README</a>
+    <a href="https://github.com/tokyomeltdown/VOX-Normalizer/blob/main/README.md" target="_blank" rel="noopener" class="en">README</a>
+    <a href="https://github.com/tokyomeltdown/VOX-Normalizer/blob/main/README.ja.md" target="_blank" rel="noopener" class="ja">README</a>
+    <a href="https://github.com/tokyomeltdown/VOX-Normalizer/blob/main/LICENSE" target="_blank" rel="noopener"><span class="en">Licence (AGPLv3)</span><span class="ja">ライセンス（AGPLv3）</span></a>
     <a href="https://tokyomeltdown.github.io" target="_blank" rel="noopener">tokyomeltdown</a>
     <a href="https://x.com/tokyomeltdownJP" target="_blank" rel="noopener" aria-label="X (@tokyomeltdownJP)"><svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;fill:currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
   </div>
-  <p>© 2026 tokyomeltdown · AGPLv3</p>
+  <p>© 2026 tokyomeltdown · <span class="en">Free software under the GNU AGPLv3, built with JUCE. Apple, Mac and macOS are trademarks of Apple Inc.</span><span class="ja">GNU AGPLv3 のフリーソフトウェアです（JUCE を使用）。Apple、Mac、macOS は Apple Inc. の商標です。</span></p>
  </div>
 </footer>
 
 <script>
-/* ---------------- Language switch ---------------- */
-function setLang(l){
-  document.body.classList.toggle('ja', l==='ja');
-  const be = document.getElementById('btn-en'), bj = document.getElementById('btn-ja');
-  be.classList.toggle('active', l==='en'); be.setAttribute('aria-pressed', l==='en');
-  bj.classList.toggle('active', l==='ja'); bj.setAttribute('aria-pressed', l==='ja');
-  try{localStorage.setItem('vox-lang', l);}catch(e){}
-  document.documentElement.lang = l;
-}
-
-/* ---------------- Interactive demo ----------------
-   Mirrors the app: gain = target - rms, clamped first by Peak
-   Ceiling and then by Max Gain.
---------------------------------------------------- */
-const PHRASES = [
-  /* rmsDb, peakDb, width weight */
-  {rms:-26.0, peak:-12.0, w:1.0},
-  {rms:-17.5, peak:-4.5,  w:1.5},
-  {rms:-22.0, peak:-9.0,  w:0.8},
-  {rms:-24.5, peak:-2.0,  w:1.2},
-  {rms:-30.0, peak:-17.0, w:0.7},
-  {rms:-19.0, peak:-6.5,  w:1.35},
-  {rms:-23.5, peak:-10.5, w:1.0}
-];
-const GAP_W = 0.28;
-let mode = 0;                                   /* 0 = Original, 1 = Normalized */
-const cv = document.getElementById('wave'), cx = cv.getContext('2d');
-
-/* Deterministic noise, so the waveform is always the same */
-function rnd(i){ const x = Math.sin(i*12.9898)*43758.5453; return x - Math.floor(x); }
-
-function analyse(){
-  const t = parseFloat(target.value), mg = parseFloat(maxg.value), pc = parseFloat(peak.value);
-  return PHRASES.map(p=>{
-    let g = t - p.rms, st = 'OK';
-    const allowed = pc - p.peak;
-    if (g > allowed){ g = allowed; st = 'PEAK'; }
-    if (g > mg){ g = mg; st = 'MAX'; }
-    else if (g < -mg){ g = -mg; st = (p.peak + g > pc + 0.01) ? 'CLIP' : 'MAX'; }
-    return {g, st};
-  });
-}
-
-/* Sizes the backing store to the element and the device pixel ratio, then
-   draws in CSS pixels. Without this the canvas is unreadable on a phone. */
-function fit(){
-  const dpr = window.devicePixelRatio || 1;
-  const w = cv.clientWidth, h = cv.clientHeight;
-  if (!w || !h) return false;
-  if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)){
-    cv.width  = Math.round(w*dpr);
-    cv.height = Math.round(h*dpr);
-  }
-  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  return true;
-}
-
-function draw(){
-  if (!fit()) return;
-
-  const W = cv.clientWidth, H = cv.clientHeight;
-  /* Narrow screens cannot fit per-phrase readouts, so only the number is drawn */
-  const compact = W < 520;
-  const BAND    = compact ? 26 : 52;
-  const waveH   = H - BAND;
-  const res = analyse();
-  const COL = {OK:'#6ae06a', MAX:'#efb854', PEAK:'#67b0ff', CLIP:'#ff5b52'};
-
-  cx.clearRect(0,0,W,H);
-  cx.fillStyle = '#0d0d1a'; cx.fillRect(0,0,W,H);
-  cx.fillStyle = '#0a0a14'; cx.fillRect(0,waveH,W,BAND);
-
-  /* Centre line */
-  cx.strokeStyle = 'rgba(55,138,221,.25)'; cx.lineWidth = 1;
-  cx.beginPath(); cx.moveTo(0,waveH/2+.5); cx.lineTo(W,waveH/2+.5); cx.stroke();
-
-  const totalW = PHRASES.reduce((a,p)=>a+p.w,0) + GAP_W*(PHRASES.length+1);
-  const unit = W/totalW;
-  let x = GAP_W*unit, n = 0;
-
-  PHRASES.forEach((p,i)=>{
-    const pw = p.w*unit;
-    /* Displayed amplitude; reflects the gain when Normalized */
-    const db  = (mode===1) ? p.peak + res[i].g : p.peak;
-    const amp = Math.pow(10, db/20) * (waveH/2) * 0.92;
-
-    cx.fillStyle = 'rgba(55,138,221,.9)';
-    const step = Math.max(1.6, pw/70), bw = step*0.62;
-    for (let bx = 0; bx < pw; bx += step){
-      const env = Math.pow(Math.sin(Math.PI*(bx+step/2)/pw), 0.45);
-      const h = amp*env*(0.45 + 0.55*rnd(n++));
-      cx.fillRect(x+bx, waveH/2 - h, bw, h*2);
-    }
-
-    /* Boundary lines */
-    cx.strokeStyle = 'rgba(255,68,85,.5)'; cx.lineWidth = 1;
-    cx.beginPath(); cx.moveTo(x+.5,0);      cx.lineTo(x+.5,waveH);      cx.stroke();
-    cx.beginPath(); cx.moveTo(x+pw-.5,0);   cx.lineTo(x+pw-.5,waveH);   cx.stroke();
-
-    /* Label band */
-    cx.textAlign = 'center';
-    const cxm = x+pw/2;
-    cx.font = '600 10px -apple-system,system-ui,sans-serif';
-    cx.fillStyle = 'rgba(55,138,221,.75)';
-    cx.fillText('#'+(i+1), cxm, waveH+13);
-
-    if (! compact){
-      cx.font = '600 11px -apple-system,system-ui,sans-serif';
-      if (mode===1){
-        cx.fillStyle = COL[res[i].st];
-        const g = res[i].g;
-        cx.fillText((g>=0?'+':'')+g.toFixed(1)+' dB  '+res[i].st, cxm, waveH+31);
-        cx.fillStyle = '#7d7c76';
-        cx.fillText(p.rms.toFixed(1)+' dB', cxm, waveH+46);
-      } else {
-        cx.fillStyle = '#888780';
-        cx.fillText(p.rms.toFixed(1)+' dB', cxm, waveH+33);
-      }
-    }
-
-    x += pw + GAP_W*unit;
-  });
-}
-
-function setMode(m){
-  mode = m;
-  document.getElementById('seg-o').classList.toggle('on', m===0);
-  document.getElementById('seg-n').classList.toggle('on', m===1);
-  draw();
-}
-
-const target = document.getElementById('target'),
-      maxg   = document.getElementById('maxg'),
-      peak   = document.getElementById('peak');
-
-function sync(){
-  document.getElementById('target-v').textContent = parseFloat(target.value).toFixed(1)+' dBFS';
-  document.getElementById('maxg-v').textContent   = '+/- '+parseFloat(maxg.value).toFixed(1)+' dB';
-  document.getElementById('peak-v').textContent   = parseFloat(peak.value).toFixed(1)+' dBFS';
-  /* Touching a slider means you want to see the result, so switch to Normalized */
-  if (mode===0) setMode(1); else draw();
-}
-[target,maxg,peak].forEach(el=>el.addEventListener('input', sync));
-
-/* ---------------- Init ---------------- */
 (function(){
-  let saved=null; try{saved=localStorage.getItem('vox-lang');}catch(e){}
-  setLang(saved || ((navigator.language||'').indexOf('ja')===0 ? 'ja' : 'en'));
+  function $(id){return document.getElementById(id)}
 
-  const io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
-  },{threshold:.15});
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  function setLang(l){
+    document.body.className='lang-'+l;
+    document.documentElement.lang=l;
+    $('btn-en').classList.toggle('on',l==='en'); $('btn-ja').classList.toggle('on',l==='ja');
+    $('btn-en').setAttribute('aria-pressed',String(l==='en')); $('btn-ja').setAttribute('aria-pressed',String(l==='ja'));
+    try{localStorage.setItem('vox-lang',l);}catch(e){}
+  }
+  $('btn-en').onclick=function(){setLang('en')};
+  $('btn-ja').onclick=function(){setLang('ja')};
+  var saved=null;
+  try{saved=localStorage.getItem('vox-lang');}catch(e){}
+  setLang(saved||((navigator.language||'').indexOf('ja')===0?'ja':'en'));
 
-  draw();
-  /* Redraw when the element size or the display changes */
-  if (window.ResizeObserver) new ResizeObserver(draw).observe(cv);
-  else window.addEventListener('resize', draw);
+  // ---- The take: five phrases of shaped noise, made the same way every time ----
+  // Levels are chosen so the defaults show OK, a plosive held back by Peak
+  // Ceiling (PEAK) and a quiet line limited by Max Gain (MAX). Five, not more,
+  // so each clip is wide enough for the app's two-line label without overlap.
+  var RATE=2000, LEN=18*RATE;            // an 18 s take at a reduced rate; enough for the picture and the maths
+  var PHR=[ // start s, length s, RMS dBFS, plosive?
+    [0.4,3.2,-26,false],[3.9,3.6,-16.5,false],[7.8,3.1,-22,false],
+    [11.2,3.2,-24,true],[14.7,3.0,-33,false]];
+  var seed=7; function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
+  function gauss(){return Math.sqrt(-2*Math.log(rnd()+1e-12))*Math.cos(2*Math.PI*rnd())}
+  var x=new Float32Array(LEN);
+  for(var i=0;i<LEN;i++) x[i]=gauss()*Math.pow(10,-84/20);       // room tone
+  var clips=PHR.map(function(p){
+    var s=Math.round(p[0]*RATE), n=Math.round(p[1]*RATE), buf=new Float32Array(n), sy=[], t=0;
+    while(t<n){var w=(0.18+rnd()*0.32)*RATE; sy.push([t,w,0.45+rnd()*0.55]); t+=w*(0.7+rnd()*0.25)}
+    var lp=0;
+    for(var k=0;k<n;k++){
+      var e=0; sy.forEach(function(q){var u=(k-q[0])/q[1]; if(u>0&&u<1) e=Math.max(e,q[2]*Math.sin(Math.PI*u))});
+      lp=lp*0.55+gauss()*0.45; buf[k]=lp*e;
+    }
+    var ss=0; for(k=0;k<n;k++) ss+=buf[k]*buf[k];
+    var g=Math.pow(10,p[2]/20)/Math.sqrt(ss/n);
+    for(k=0;k<n;k++) x[s+k]=buf[k]*g;
+    if(p[3]){ // a "p" near the start: a burst of a few milliseconds peaking at -2 dBFS
+      var at=s+Math.round(n*0.08);
+      for(k=0;k<14;k++) x[at+k]=(k%2?-1:1)*0.79*Math.exp(-k/5)*(k===0?1:0.9);
+    }
+    return {start:s,len:n};
+  });
+  // RMS and peak per clip, exactly as analyzeClips() measures them
+  clips.forEach(function(c){
+    var ss=0,pk=0; for(var k=c.start;k<c.start+c.len;k++){ss+=x[k]*x[k]; pk=Math.max(pk,Math.abs(x[k]))}
+    c.rms=20*Math.log10(Math.sqrt(ss/c.len)); c.peak=20*Math.log10(pk);
+  });
+
+  // ---- Same order as analyzeClips(): Peak Ceiling first, then Max Gain ----
+  var target=$('target'), maxg=$('maxg'), peak=$('peak');
+  function analyse(){
+    var t=+target.value, mg=+maxg.value, pc=+peak.value;
+    clips.forEach(function(c){
+      var g=t-c.rms, st='OK';
+      if(g>pc-c.peak){g=pc-c.peak; st='PEAK'}
+      if(g>mg){g=mg; st='MAX'}
+      else if(g<-mg){g=-mg; st=(c.peak+g>pc+0.01)?'CLIP':'MAX'}
+      c.gain=g; c.st=st;
+    });
+  }
+
+  // ---- Drawing, following WaveformView::paint() ----
+  var cv=$('wave'), cx=cv.getContext('2d'), normalized=false;
+  var COL={OK:'#6ae06a',MAX:'#efb854',PEAK:'#67b0ff',CLIP:'#ff5b52'}, BLUE='55,138,221', BAND=42;
+  function fmt(v){return (v>=0?'+':'')+v.toFixed(1)}
+  function draw(){
+    var dpr=window.devicePixelRatio||1, W=cv.clientWidth, H=cv.clientHeight;
+    if(!W||!H) return;
+    if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+    cx.setTransform(dpr,0,0,dpr,0,0);
+    var waveH=H-BAND, mid=waveH/2, h2=waveH*0.43, narrow=W<440;
+    cx.clearRect(0,0,W,H);
+    cx.fillStyle='#0d0d1a'; cx.fillRect(0,0,W,H);
+    cx.fillStyle='#0a0a14'; cx.fillRect(0,waveH,W,BAND);
+    cx.strokeStyle='rgba('+BLUE+',.25)'; cx.lineWidth=0.5; cx.beginPath(); cx.moveTo(0,waveH); cx.lineTo(W,waveH); cx.stroke();
+    // One peak per pixel, with the clip's gain applied when Normalized
+    var gainAt=new Float32Array(LEN).fill(1);
+    if(normalized) clips.forEach(function(c){var g=Math.pow(10,c.gain/20); for(var k=c.start;k<c.start+c.len;k++) gainAt[k]=g});
+    var pk=[];
+    for(var px=0;px<W;px++){
+      var a=Math.floor(px/W*LEN), b=Math.max(a+1,Math.floor((px+1)/W*LEN)), m=0;
+      for(var k=a;k<b&&k<LEN;k++) m=Math.max(m,Math.abs(x[k])*gainAt[k]);
+      pk.push(Math.min(m,1.2));
+    }
+    cx.beginPath(); cx.moveTo(0,mid);
+    for(px=0;px<W;px++) cx.lineTo(px,mid-pk[px]*h2);
+    for(px=W-1;px>=0;px--) cx.lineTo(px,mid+pk[px]*h2);
+    cx.closePath(); cx.fillStyle='rgba('+BLUE+',.35)'; cx.fill();
+    cx.beginPath(); for(px=0;px<W;px++){var y=mid-pk[px]*h2; px?cx.lineTo(px,y):cx.moveTo(px,y)}
+    cx.strokeStyle='rgba('+BLUE+',.85)'; cx.lineWidth=1; cx.stroke();
+    // Clips: a faint highlight, red boundaries, and the label band
+    cx.textAlign='center'; cx.textBaseline='middle';
+    clips.forEach(function(c,i){
+      var xs=c.start/LEN*W, xe=(c.start+c.len)/LEN*W, w=xe-xs, xm=(xs+xe)/2;
+      cx.fillStyle='rgba('+BLUE+',.06)'; cx.fillRect(xs,0,w,waveH);
+      cx.strokeStyle='rgba(255,68,85,.85)'; cx.lineWidth=1.2;
+      cx.beginPath(); cx.moveTo(xs,0); cx.lineTo(xs,waveH); cx.moveTo(xe,0); cx.lineTo(xe,waveH); cx.stroke();
+      cx.textAlign='left'; cx.fillStyle='rgba('+BLUE+',.7)'; cx.font='700 10px -apple-system,BlinkMacSystemFont,sans-serif';
+      cx.fillText('#'+(i+1),xs+3,waveH+9); cx.textAlign='center';
+      if(narrow){
+        // A phone is too narrow for the app's two lines; keep the gain and status
+        cx.fillStyle=COL[c.st]; cx.font='700 10px -apple-system,BlinkMacSystemFont,sans-serif';
+        cx.fillText(fmt(c.gain),xm,waveH+22); cx.font='700 9px -apple-system,BlinkMacSystemFont,sans-serif'; cx.fillText(c.st,xm,waveH+34);
+      }else{
+        cx.fillStyle='#888780'; cx.font='10.5px -apple-system,BlinkMacSystemFont,sans-serif';
+        cx.fillText(c.rms.toFixed(1)+' dB',xm,waveH+9);
+        cx.fillStyle=COL[c.st]; cx.font='700 11px -apple-system,BlinkMacSystemFont,sans-serif';
+        cx.fillText(fmt(c.gain)+' dB  '+c.st,xm,waveH+26);
+      }
+    });
+    cx.strokeStyle='rgba('+BLUE+',.35)'; cx.lineWidth=0.5; cx.strokeRect(0.25,0.25,W-0.5,H-0.5);
+  }
+
+  function setMode(n){
+    normalized=n;
+    $('seg-o').classList.toggle('on',!n); $('seg-n').classList.toggle('on',n);
+    $('seg-o').setAttribute('aria-pressed',String(!n)); $('seg-n').setAttribute('aria-pressed',String(n));
+    if(n) $('win').classList.add('used');
+    draw();
+  }
+  $('seg-o').onclick=function(){setMode(false)};
+  $('seg-n').onclick=function(){setMode(true)};
+
+  // While a slider moves only its number changes; letting go re-runs the
+  // analysis, as in the app (sliderDragEnded -> runAnalysis).
+  function fill(el){el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%')}
+  function label(){
+    $('target-v').textContent=(+target.value).toFixed(1)+' dBFS';
+    $('maxg-v').textContent='+/- '+(+maxg.value).toFixed(1)+' dB';
+    $('peak-v').textContent=(+peak.value).toFixed(1)+' dBFS';
+  }
+  [target,maxg,peak].forEach(function(el){
+    fill(el);
+    el.addEventListener('input',function(){fill(el);label()});
+    el.addEventListener('change',function(){analyse();draw()});
+  });
+
+  analyse(); draw();
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(draw,80)});
 })();
 </script>
 </body>
