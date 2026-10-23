@@ -27,7 +27,7 @@
    spaced-out mono labels, plain buttons, one accent. The ground and the accent
    are the app's own: near-black #1c1c1e and the coral of its controls. */
 :root{
-  --bg:#1c1c1e; --ink:#fcfcfc; --sub:#a8a8ad; --muted:#86868b; --line:rgba(252,252,252,.12); --grid:rgba(252,252,252,.05);
+  --bg:#1c1c1e; --ink:#fcfcfc; --sub:#a8a8ad; --muted:#86868b; --line:rgba(252,252,252,.12); --grid:rgba(252,252,252,.04);
   --coral:#d97757;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
   --ease:cubic-bezier(.2,.8,.2,1);
@@ -37,7 +37,9 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Hiragino Sans","Noto Sans JP",sans-serif}
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Hiragino Sans","Noto Sans JP",sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:48px 48px;background-position:-1px -1px}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
 
@@ -68,13 +70,7 @@ body.lang-ja{word-break:auto-phrase}
 .btn.big{font-size:16px;padding:14px 26px}
 
 /* ---------------- hero ---------------- */
-.hero{padding:96px 0 40px;position:relative;z-index:0}
-/* The grid sits behind the headline only and fades out before the demo, so it
-   never runs a few pixels off the ruled lines of the sections below. */
-.hero::before{content:"";position:absolute;z-index:-1;top:0;left:50%;width:100vw;height:620px;transform:translateX(-50%);pointer-events:none;
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:48px 48px;background-position:center -1px;
-  -webkit-mask-image:linear-gradient(#000 45%,transparent 92%);mask-image:linear-gradient(#000 45%,transparent 92%)}
+.hero{padding:96px 0 40px}
 .hero h1{font-size:clamp(34px,6.2vw,68px);line-height:1.04;font-weight:700;letter-spacing:-.03em;margin:18px 0 20px;max-width:14ch}
 body.lang-ja .hero h1{max-width:none;font-size:clamp(28px,5.4vw,56px);line-height:1.18;letter-spacing:-.01em}
 .hero p.lede{color:var(--sub);font-size:clamp(17px,2vw,20px);max-width:34em}
