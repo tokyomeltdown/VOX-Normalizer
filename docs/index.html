@@ -171,7 +171,7 @@ footer a:hover{color:var(--ink)}
   <a class="brand" href="./"><img src="icon.png" alt=""><span><b>VOX Normalizer</b></span></a>
   <div class="right">
     <div class="lang"><button id="btn-en" class="on" aria-pressed="true">EN</button><button id="btn-ja" aria-pressed="false">日本語</button></div>
-    <a class="btn solid" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download</span><span class="ja">ダウンロード</span></a>
+    <a class="btn solid dl" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download</span><span class="ja">ダウンロード</span></a>
   </div>
 </div></header>
 
@@ -185,7 +185,7 @@ footer a:hover{color:var(--ink)}
     <span class="ja">ボーカルのテイクを放り込むだけ。フレーズごとにゲインを1つ決めて、1本のファイルで書き出します。DAW は要りません。</span>
   </p>
   <div class="cta">
-    <a class="btn solid big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
+    <a class="btn solid big dl" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
     <a class="btn ghost big" href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener"><span class="en">Source on GitHub</span><span class="ja">GitHub でソースを見る</span></a>
   </div>
   <p class="fine"><span class="nw">macOS 11+</span> · <span class="nw">Apple silicon &amp; Intel</span> · <span class="nw"><span class="en">Signed &amp; notarized</span><span class="ja">署名・公証済み</span></span></p>
@@ -260,7 +260,7 @@ footer a:hover{color:var(--ink)}
   <div class="side">
     <p><span class="en">Read the code, build it yourself, or open an issue.</span><span class="ja">コードを読むのも、自分でビルドするのも、Issue を立てるのも自由です。</span></p>
     <div class="cta" style="margin-top:0">
-      <a class="btn solid big" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
+      <a class="btn solid big dl" href="https://github.com/tokyomeltdown/VOX-Normalizer/releases/latest/download/VOX_Normalizer.pkg"><span class="en">Download — free</span><span class="ja">無料でダウンロード</span></a>
       <a class="btn ghost big" href="https://github.com/tokyomeltdown/VOX-Normalizer" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
@@ -450,6 +450,19 @@ footer a:hover{color:var(--ink)}
 
   analyse(); draw();
   var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(draw,80)});
+
+  // The browser's own confirmation before the package downloads. The version and size are written here by hand:
+  // change them with each release (Finder's size, in decimal units).
+  var DL={version:'1.3',size:'4.8 MB'};
+  document.querySelectorAll('a.dl').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var ja=document.body.classList.contains('lang-ja');
+      var msg=ja
+        ?'VOX_Normalizer.pkg（VOX Normalizer '+DL.version+'・約 '+DL.size+'）をダウンロードしますか？'
+        :'Download VOX_Normalizer.pkg (VOX Normalizer '+DL.version+', about '+DL.size+')?';
+      if(!window.confirm(msg)) e.preventDefault();
+    });
+  });
 })();
 </script>
 </body>
